@@ -8,9 +8,9 @@ import "solidity-coverage"
 import "hardhat-deploy"
 import { HardhatUserConfig } from "hardhat/config"
 
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || ""
-const GOERLI_RPC_URL =
-  process.env.GOERLI_RPC_URL || "https://eth-goerli.alchemyapi.io/v2/your-api-key"
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
+const ALCHEMY_API_KEY= process.env.ALCHEMY_API_KEY
+const GOERLI_RPC_URL ='https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}'
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "privatKey"
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 
@@ -26,9 +26,9 @@ const config: HardhatUserConfig = {
       allowUnlimitedContractSize: true
     },
     goerli: {
-      url: GOERLI_RPC_URL,
+      url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts: [PRIVATE_KEY],
-      chainId: 5,
+      //chainId: 5,
     },
   },
   solidity: {
