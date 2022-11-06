@@ -8,11 +8,13 @@
 
 pragma solidity>=0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 interface IMidpoint {
     function callMidpoint(uint64 midpointId, bytes calldata _data) external returns(uint256 requestId);
 }
 
-contract SampleContract{
+contract SampleContract is Ownable{
     // These events are for demonstration purposes only; they can be removed without effect.
     event RequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event ResponseReceived(uint256 requestId);
@@ -23,8 +25,8 @@ contract SampleContract{
     // Midpoint ID
     uint64 constant midpointID = 414;
 
-    constructor () {
-      
+    constructor (address governor) {
+      transferOwnership(governor);
     }
 
     /*
@@ -37,7 +39,7 @@ contract SampleContract{
      * there may be multiple places in this contract that call the midpoint or multiple midpoints called by the same contract.
      */ 
 
-    function callMidpoint(string memory SERVER_ID, string memory USER_ID) public {
+    function callMidpoint(string memory SERVER_ID, string memory USER_ID) public onlyOwner {
         
         // Argument String
         bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
