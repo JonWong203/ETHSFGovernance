@@ -16,7 +16,10 @@ interface IMidpoint {
 
 contract DAOPoint is Ownable{
     // These events are for demonstration purposes only; they can be removed without effect.
-    event RequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
+    event banRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
+    event unBanRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
+    event addRoleRequestMade(uint256 requestId, string SERVER_ID, string USER_ID, string ROLE_ID);
+    event removeRoleRequestMade(uint256 requestId, string SERVER_ID, string USER_ID, string ROLE_ID);
     event ResponseReceived(uint256 requestId);
     
     address constant startpointAddress = 0x47a4905D4C2Eabd58abBDFEcBaeB07F1A29b660c; // midpoint's mumbai address
@@ -26,6 +29,8 @@ contract DAOPoint is Ownable{
     // Midpoint ID
     uint64 constant banMidpointID = 414;
     uint64 constant unBanMidpointID = 434;
+    uint64 constant addRoleMidpointID = 441;
+    uint64 constant removeRoleMidpointID = 442;
 
     constructor (address governor, string memory _serverID) {
       transferOwnership(governor);
@@ -51,7 +56,7 @@ contract DAOPoint is Ownable{
         uint256 requestId = IMidpoint(startpointAddress).callMidpoint(banMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
+        emit banRequestMade(requestId, SERVER_ID, USER_ID);
     }
 
      function unBanUser(string memory USER_ID) public onlyOwner {
@@ -63,7 +68,7 @@ contract DAOPoint is Ownable{
         uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
+        emit unBanRequestMade(requestId, SERVER_ID, USER_ID);
     }
 
     function CreateRole(string memory USER_ID) public onlyOwner {
@@ -78,28 +83,28 @@ contract DAOPoint is Ownable{
         emit RequestMade(requestId, SERVER_ID, USER_ID);
     }
 
-    function AddRole(string memory USER_ID) public onlyOwner {
+    function AddRole(string memory USER_ID, string memory ROLE_ID) public onlyOwner {
         
         // Argument String
-        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00), ROLE_ID, bytes1(0x00));
         
         // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(addRoleMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
+        emit addRoleRequestMade(requestId, SERVER_ID, USER_ID, ROLE_ID);
     }
 
-    function RemoveRole(string memory USER_ID) public onlyOwner {
+    function RemoveRole(string memory USER_ID, string memory ROLE_ID) public onlyOwner {
         
         // Argument String
-        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00), ROLE_ID, bytes1(0x00));
         
         // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(removeRoleMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
+        emit removeRoleRequestMade(requestId, SERVER_ID, USER_ID, ROLE_ID);
     }
 
     function CreateChannel(string memory USER_ID) public onlyOwner {
