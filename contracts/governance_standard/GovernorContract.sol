@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
+// import midpoint contract
+import "../Midpoint.sol";
 
 contract GovernorContract is
   Governor,
@@ -16,12 +18,23 @@ contract GovernorContract is
   GovernorVotesQuorumFraction,
   GovernorTimelockControl
 {
+  mapping (address => bool) public userBanStatus;
+
+  address immutable public midpointContract;
+
+  function banUser(address _address, uint64 serverID, bytes memory userID) external {
+    require(msg.sender == address(this), "Must be called by GovernorContract");
+    userBanStatus[_address] = true;
+    IMidpoint(midpointContract).callMidpoint(serverID, userID);
+   }
+
   constructor(
     IVotes _token,
     TimelockController _timelock,
     uint256 _quorumPercentage,
     uint256 _votingPeriod,
-    uint256 _votingDelay
+    uint256 _votingDelay,
+    address _midpointContract
   )
     Governor("GovernorContract")
     GovernorSettings(
@@ -32,7 +45,11 @@ contract GovernorContract is
     GovernorVotes(_token)
     GovernorVotesQuorumFraction(_quorumPercentage)
     GovernorTimelockControl(_timelock)
-  {}
+  
+  {
+    midpointContract = _midpointContract;
+    // initialzied in javascript deploy
+  }
 
   function votingDelay()
     public
@@ -82,8 +99,11 @@ contract GovernorContract is
   }
 
   function propose(
+    // address of governor contract
     address[] memory targets,
+    // set t0 0
     uint256[] memory values,
+    // user_id, action
     bytes[] memory calldatas,
     string memory description
   ) public override(Governor, IGovernor) returns (uint256) {
