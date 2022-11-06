@@ -65,6 +65,81 @@ contract DAOPoint is Ownable{
         // For Demonstration Purposes Only
         emit RequestMade(requestId, SERVER_ID, USER_ID);
     }
+
+    function CreateRole(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
+    function RemoveRole(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
+    function CreateChannel(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
+    function RemoveChannel(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+    
+    function CreateGuild(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
+    function RemoveGuild(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+    
+    
+    
     
    /*
     * This function is the callback target specified in the prebuilt function in the midpoint response workflow. 
