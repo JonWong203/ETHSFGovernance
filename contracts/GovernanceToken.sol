@@ -7,7 +7,15 @@ contract GovernanceToken is ERC20Votes {
   uint256 public s_maxSupply = 1000000000000000000000000;
 
   constructor() ERC20("GovernanceToken", "GT") ERC20Permit("GovernanceToken") {
-    _mint(msg.sender, s_maxSupply);
+    _mint(msg.sender, s_maxSupply/5);
+    // Spencer
+    _mint(0x0231C4ea808409667BB5a5b3a283118181F7AA2A, s_maxSupply/5);
+    // River
+    _mint(0xefb8a94Eea87801de02ae41e0c943C3fEADAec42, s_maxSupply/5);
+    // Paav
+    _mint(0x564097Eb6daA523A8e7FaAA4831eB53C755bD8F5, s_maxSupply/5);
+    // Caleb
+    _mint(0x613a224fc63abeb1716f2bb5ffda05f20e2916e8, s_maxSupply/5);
   }
 
   // The functions below are overrides required by Solidity.
