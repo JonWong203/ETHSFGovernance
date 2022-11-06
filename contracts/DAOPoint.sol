@@ -78,6 +78,18 @@ contract DAOPoint is Ownable{
         emit RequestMade(requestId, SERVER_ID, USER_ID);
     }
 
+    function AddRole(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
     function RemoveRole(string memory USER_ID) public onlyOwner {
         
         // Argument String
