@@ -8,11 +8,13 @@
 
 pragma solidity>=0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 interface IMidpoint {
     function callMidpoint(uint64 midpointId, bytes calldata _data) external returns(uint256 requestId);
 }
 
-contract SampleContract{
+contract DAOPoint is Ownable{
     // These events are for demonstration purposes only; they can be removed without effect.
     event RequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event ResponseReceived(uint256 requestId);
@@ -20,11 +22,14 @@ contract SampleContract{
     address constant startpointAddress = 0x47a4905D4C2Eabd58abBDFEcBaeB07F1A29b660c; // midpoint's mumbai address
     address constant whitelistedCallbackAddress = 0xC0FFEE4a3A2D488B138d090b8112875B90b5e6D9;
     
+    string SERVER_ID;
     // Midpoint ID
-    uint64 constant midpointID = 414;
+    uint64 constant banMidpointID = 414;
+    uint64 constant unBanMidpointID = 434;
 
-    constructor () {
-      
+    constructor (address governor, string memory _serverID) {
+      transferOwnership(governor);
+      SERVER_ID = _serverID;
     }
 
     /*
@@ -37,13 +42,25 @@ contract SampleContract{
      * there may be multiple places in this contract that call the midpoint or multiple midpoints called by the same contract.
      */ 
 
-    function callMidpoint(string memory SERVER_ID, string memory USER_ID) public {
+    function banUser(string memory USER_ID) public onlyOwner {
         
         // Argument String
         bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
         
         // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(midpointID, args);
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(banMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit RequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
+     function unBanUser(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
 
         // For Demonstration Purposes Only
         emit RequestMade(requestId, SERVER_ID, USER_ID);
