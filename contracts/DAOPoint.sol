@@ -29,6 +29,7 @@ contract DAOPoint is Ownable{
     // Midpoint ID
     uint64 constant banMidpointID = 414;
     uint64 constant unBanMidpointID = 434;
+    uint64 constant createRoleMidpointID = 413;
     uint64 constant addRoleMidpointID = 441;
     uint64 constant removeRoleMidpointID = 442;
 
@@ -71,13 +72,13 @@ contract DAOPoint is Ownable{
         emit unBanRequestMade(requestId, SERVER_ID, USER_ID);
     }
 
-    function CreateRole(string memory USER_ID) public onlyOwner {
+    function CreateRole(string memory ROLE_NAME, string memory ROLE_COLOR) public onlyOwner {
         
         // Argument String
-        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        bytes memory args = abi.encodePacked(ROLE_NAME, bytes1(0x00), ROLE_COLOR, bytes1(0x00), SERVER_ID, bytes1(0x00));
         
         // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(createRoleMidpointID, args);
 
         // For Demonstration Purposes Only
         emit RequestMade(requestId, SERVER_ID, USER_ID);
