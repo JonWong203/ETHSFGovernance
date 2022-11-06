@@ -1,6 +1,6 @@
 const { ethers } = require("hardhat");
 
-async function main() {
+async function deployBoiler() {
     const [deployer] = await ethers.getSigners();
     console.log("Deploying contracts with the account:", deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
@@ -12,7 +12,7 @@ async function main() {
     console.log("Transaction hash:", boilerContract.deployTransaction.hash);
   }
   
-  main()
+  deployBoiler()
     .then(() => process.exit(0))
     .catch((error) => {
       console.error(error);

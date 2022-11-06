@@ -1,3 +1,5 @@
+// example of interacting with boiler to ban someone locally, instead of using tally
+
 require('dotenv').config();
 const API_URL = process.env.MUMBAI_URL;
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
