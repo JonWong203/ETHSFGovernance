@@ -16,11 +16,13 @@ interface IMidpoint {
 
 contract DAOPoint is Ownable{
     // These events are for demonstration purposes only; they can be removed without effect.
+    event kickRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event banRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event unBanRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event createRoleRequestMade(uint256 requestId, string SERVER_ID, string ROLE_NAME, string ROLE_COLOR);
     event addRoleRequestMade(uint256 requestId, string SERVER_ID, string USER_ID, string ROLE_ID);
     event removeRoleRequestMade(uint256 requestId, string SERVER_ID, string USER_ID, string ROLE_ID);
+    event createChannelRequestMade(uint256 requestId, string SERVER_ID, string CHANNEL_NAME, string CHANNEL_TYPE, string CHANNEL_TOPIC);
     event ResponseReceived(uint256 requestId);
     
     address constant startpointAddress = 0x47a4905D4C2Eabd58abBDFEcBaeB07F1A29b660c; // midpoint's mumbai address
@@ -28,11 +30,14 @@ contract DAOPoint is Ownable{
     
     string SERVER_ID;
     // Midpoint ID
+    uint64 constant kickMidpointID = 394;
     uint64 constant banMidpointID = 414;
     uint64 constant unBanMidpointID = 434;
     uint64 constant createRoleMidpointID = 413;
     uint64 constant addRoleMidpointID = 441;
     uint64 constant removeRoleMidpointID = 442;
+    uint64 constant createChannelMidpointID = 419;
+
 
     constructor (address governor, string memory _serverID) {
       transferOwnership(governor);
@@ -48,6 +53,19 @@ contract DAOPoint is Ownable{
      * Any call to 'callMidpoint' from a whitelisted contract will make a call to the midpoint;
      * there may be multiple places in this contract that call the midpoint or multiple midpoints called by the same contract.
      */ 
+
+    function kickUser(string memory USER_ID) public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(kickMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit kickRequestMade(requestId, SERVER_ID, USER_ID);
+    }
+
 
     function banUser(string memory USER_ID) public onlyOwner {
         
@@ -82,7 +100,7 @@ contract DAOPoint is Ownable{
         uint256 requestId = IMidpoint(startpointAddress).callMidpoint(createRoleMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit createRoleRequestMade(requestId, SERVER_ID, ROLE_NAME, ROLE_COLOR;
+        emit createRoleRequestMade(requestId, SERVER_ID, ROLE_NAME, ROLE_COLOR);
     }
 
     function AddRole(string memory USER_ID, string memory ROLE_ID) public onlyOwner {
@@ -109,31 +127,17 @@ contract DAOPoint is Ownable{
         emit removeRoleRequestMade(requestId, SERVER_ID, USER_ID, ROLE_ID);
     }
 
-    function CreateChannel(string memory USER_ID) public onlyOwner {
+    function CreateChannel(string memory CHANNEL_NAME, string memory CHANNEL_TYPE, string memory CHANNEL_TOPIC) public onlyOwner {
         
         // Argument String
         bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
         
         // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(createChannelMidpointID, args);
 
         // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
-    }
-
-    function RemoveChannel(string memory USER_ID) public onlyOwner {
-        
-        // Argument String
-        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00), USER_ID, bytes1(0x00));
-        
-        // Call Your Midpoint
-        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(unBanMidpointID, args);
-
-        // For Demonstration Purposes Only
-        emit RequestMade(requestId, SERVER_ID, USER_ID);
-    }
-    
-    
+        emit createChannelRequestMade(requestId, SERVER_ID, CHANNEL_NAME, CHANNEL_TYPE, CHANNEL_TOPIC);
+    }    
     
     
    /*
