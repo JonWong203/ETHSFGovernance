@@ -16,6 +16,7 @@ interface IMidpoint {
 
 contract DAOPoint is Ownable{
     // These events are for demonstration purposes only; they can be removed without effect.
+    event getBansRequestMade(uint256 requestId, string SERVER_ID);
     event kickRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event banRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
     event unBanRequestMade(uint256 requestId, string SERVER_ID, string USER_ID);
@@ -30,6 +31,7 @@ contract DAOPoint is Ownable{
     
     string SERVER_ID;
     // Midpoint ID
+    uint64 constant getBansMidpointID = 409;
     uint64 constant kickMidpointID = 394;
     uint64 constant banMidpointID = 414;
     uint64 constant unBanMidpointID = 434;
@@ -53,6 +55,18 @@ contract DAOPoint is Ownable{
      * Any call to 'callMidpoint' from a whitelisted contract will make a call to the midpoint;
      * there may be multiple places in this contract that call the midpoint or multiple midpoints called by the same contract.
      */ 
+
+    function getBans() public onlyOwner {
+        
+        // Argument String
+        bytes memory args = abi.encodePacked(SERVER_ID, bytes1(0x00));
+        
+        // Call Your Midpoint
+        uint256 requestId = IMidpoint(startpointAddress).callMidpoint(getBansMidpointID, args);
+
+        // For Demonstration Purposes Only
+        emit getBansRequestMade(requestId, SERVER_ID);
+    }
 
     function kickUser(string memory USER_ID) public onlyOwner {
         
